@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tariffmark</title>
+<meta name="description" content="Tariffmark turns ordinary shipping documents into evidence-backed customs determinations for UK SME traders and customs intermediaries.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Logo mark symbol: a border gate with a clearance tick passing through it -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="cb-mark" viewBox="0 0 40 40">
+      <rect x="7" y="5" width="4.6" height="30" rx="1.1" fill="currentColor"/>
+      <rect x="28.4" y="5" width="4.6" height="30" rx="1.1" fill="currentColor"/>
+      <rect x="7" y="5" width="26" height="3.4" rx="1.1" fill="currentColor"/>
+      <path d="M3.2 22.6 L15.6 30.8 L36.8 9.2" fill="none" stroke="var(--knock)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3.2 22.6 L15.6 30.8 L36.8 9.2" fill="none" stroke="var(--clear)" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="site-head" id="top">
+  <div class="wrap head-row">
+    <a class="logo" href="#top" aria-label="Tariffmark home"><svg aria-hidden="true"><use href="#cb-mark"/></svg><span class="wordmark">Tariffmark</span></a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#product">Product</a>
+      <a href="#how">How it works</a>
+      <a href="#technology">Technology</a>
+      <a href="#customers">Who it's for</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#founder">Founder</a>
+      <a href="#contact" class="btn btn-primary head-cta" style="color:var(--btn-fg)">Become a design partner</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">Menu</button>
+  </div>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="product" aria-labelledby="hero-h">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="status-pill"><i></i>In development. Recruiting design partners for 2027 launch</span>
+      <h1 id="hero-h">Know your commodity code and your origin before the goods move.</h1>
+      <p class="hero-lede">Tariffmark reads the invoices, packing lists and product specs you already have and prepares the customs decision: <strong>the classification, the rules-of-origin verdict and the paperwork</strong>, each with its reasoning, citations and an audit record, for someone on your team to approve.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contact">Become a design partner</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="tagline">
+        <p>Brokers sell you a code. HMRC tells you what a code means.</p>
+        <p>Tariffmark gives you the decision, the evidence, and the right to stand behind it.</p>
+      </div>
+    </div>
+
+    <!-- Live determination record -->
+    <div class="record" aria-label="Example determination record">
+      <div class="rec-tabs" role="tablist" aria-label="Example shipments">
+        <button class="rec-tab" role="tab" aria-selected="true" data-sample="boots" id="tab-boots">Leather boots<small>UK export to the EU</small></button>
+        <button class="rec-tab" role="tab" aria-selected="false" data-sample="impeller" id="tab-impeller">Pump impeller<small>Import into the UK</small></button>
+        <button class="rec-tab" role="tab" aria-selected="false" data-sample="whisky" id="tab-whisky">Single malt<small>UK export to India</small></button>
+      </div>
+      <div class="rec-body" id="recBody">
+        <div class="rec-meta">
+          <span class="rec-id" id="recId">CB-D-26-00417</span>
+          <span class="chip clear" id="recStatus">Ready for approval</span>
+        </div>
+        <div class="source-doc"><b id="recSrcLabel">From your commercial invoice</b><span id="recSrc"></span></div>
+        <div class="attrs" id="recAttrs"></div>
+        <ol class="pipeline" id="pipeline" aria-label="Determination stages">
+          <li>Read document</li><li>Classify</li><li>Test origin</li><li>Duty and risk</li><li>Route to you</li>
+        </ol>
+        <div class="result" id="result" aria-live="polite">
+          <div class="hs">
+            <span class="hs-label">Proposed commodity classification</span>
+            <div class="hs-code" id="hsCode"></div>
+          </div>
+          <div class="rec-cols">
+            <div>
+              <div class="rec-h">Authority relied on</div>
+              <ul class="cites" id="recCites"></ul>
+            </div>
+            <div class="origin-box">
+              <div class="rec-h" id="originAgr">Preferential origin</div>
+              <span class="verdict" id="originVerdict"></span>
+              <span id="originDetail"></span>
+              <span><b>Keep on file:</b> <span id="originProof"></span></span>
+            </div>
+          </div>
+          <div class="meters">
+            <div class="meter"><div class="meter-top"><span>Confidence in the code</span><b id="confV">0.92</b></div><div class="bar" id="confBar"><span style="width:92%"></span><i class="thr" style="left:80%" title="Your approval threshold"></i></div></div>
+            <div class="meter"><div class="meter-top"><span>Groundedness: does the cited authority support it?</span><b id="grV">4 of 4</b></div><div class="bar" id="grBar"><span style="width:100%"></span></div></div>
+          </div>
+          <div class="route clear" id="route">
+            <p id="routeText"></p>
+            <div class="route-actions" id="routeActions">
+              <button class="mini primary" data-act="approve">Approve determination</button>
+              <button class="mini" data-act="info">Add information</button>
+              <button class="mini" data-act="expert">Ask a customs expert</button>
+            </div>
+          </div>
+        </div>
+        <div class="rec-foot">
+          <span>Illustrative example of the planned product, not a classification ruling.</span>
+          <button id="replay">Run again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROBLEM ================= -->
+<section class="block" id="problem" aria-labelledby="problem-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="problem-h">Every border crossing needs a decision that someone has to defend.</h2>
+      <p>Each shipment needs a commodity code, and each preferential claim needs an origin test. The legal responsibility sits with the trader, yet the expertise sits with a shrinking pool of specialists that most small firms cannot afford to hire.</p>
+    </div>
+    <div class="problem-grid">
+      <div>
+        <div class="facts">
+          <div class="fact"><span class="v num">91.3m</span><p>customs declarations cleared in 2025, up 7.9% on 2024</p><cite>HMRC, declarant statistics 2025</cite></div>
+          <div class="fact"><span class="v num">4,880</span><p>active declarants filing them, down 13.7% in a year</p><cite>HMRC, declarant statistics 2025</cite></div>
+          <div class="fact"><span class="v num">81.1%</span><p>of 2025 declarations were filed by a third party on the trader's behalf</p><cite>HMRC, declarant statistics 2025</cite></div>
+          <div class="fact"><span class="v num">7%</span><p>of SMEs employ specialist trade staff</p><cite>FSB evidence to the Business and Trade Committee</cite></div>
+          <div class="fact"><span class="v num">85%</span><p>of SME importers and exporters report problems; documentation is the most common, at 64%</p><cite>FSB; British Chambers of Commerce</cite></div>
+          <div class="fact"><span class="v num">£50</span><p>median agent fee per declaration, the price most SMEs pay for a code with no reasoning attached</p><cite>HMRC research report RR808</cite></div>
+        </div>
+      </div>
+      <div>
+        <figure class="pref-chart" style="margin:0">
+          <h3>Duty savings left unclaimed</h3>
+          <p>Share of eligible UK goods exports to the EU that actually claimed the tariff preference they were entitled to, 2024.</p>
+          <div class="prow"><span>All goods</span><div class="ptrack"><div class="pfill" style="width:83.1%"></div><span class="pval" style="left:83.1%">83.1%</span></div></div>
+          <div class="prow"><span>Textiles</span><div class="ptrack"><div class="pfill" style="width:56.6%"></div><span class="pval" style="left:56.6%">56.6%</span></div></div>
+          <div class="prow"><span>Footwear</span><div class="ptrack"><div class="pfill" style="width:24%"></div><span class="pval" style="left:24%">24.0%</span></div></div>
+          <div class="paxis"><span></span><div><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div></div>
+          <p class="pref-note">Roughly a sixth of eligible trade pays duty it may not owe. Research links this to the cost of proving origin, which falls hardest on small exporters. Source: DBT/HMRC, Preference utilisation of UK trade in goods 2024.</p>
+        </figure>
+        <p class="quote-line">Tariffmark treats origin as money a trader can recover, as well as a risk to manage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= POSITION ================= -->
+<section class="block" id="position" aria-labelledby="position-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="position-h">Built for the layer of customs nobody serves small firms in.</h2>
+      <p>UK customs compliance has settled into six layers. HMRC is digitising the systems and publishing the content for free. Brokers carry the liability. The judgement in between, deciding what a product is and where it qualifies as coming from, is where SMEs have no affordable option.</p>
+    </div>
+    <div class="layers-wrap">
+      <ul class="layers" id="layers" aria-label="Industry layers"></ul>
+      <div class="layer-detail" id="layerDetail" aria-live="polite"></div>
+    </div>
+    <div class="position-statement">
+      <div><b>Not a broker</b><p>Tariffmark never files on its own authority or takes on the declarant's liability. It prepares the decision; your team or your representative approves and files.</p></div>
+      <div><b>Not a lookup tool</b><p>HMRC's tools explain what a code means. Tariffmark works out which code is yours, tests origin, and produces the evidence pack.</p></div>
+      <div><b>The decision-and-evidence layer</b><p>A defensible determination for UK SME trade, built to the British Standard for customs intermediaries and priced for firms that will never hire a customs specialist.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="block" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="how-h">From a shipping document to an approved determination.</h2>
+      <p>The planned first session takes one real document and produces a decision you can act on. The aim is under 30 minutes for a first determination and under five for a repeat product once it is in your catalogue.</p>
+    </div>
+    <ol class="flow">
+      <li><h3>Upload what you have</h3><p>A commercial invoice, packing list or product specification. No customs knowledge needed to start.</p></li>
+      <li><h3>Extract the facts</h3><p>Material, form, function, value, origin of components and destination are pulled into structured product attributes.</p></li>
+      <li><h3>Classify by the rules</h3><p>A fixed sequence: chapter and heading candidates, section and chapter notes, exclusions, the General Interpretative Rules, then subheadings.</p></li>
+      <li><h3>Test origin and duty</h3><p>Your bill of materials is checked against the agreement's product-specific rule. You see the verdict, the proof to keep, and the duty position.</p></li>
+      <li class="human"><h3>You decide</h3><p>Approve, add information, or send for expert review. Low-confidence or high-exposure cases are routed to a person automatically.</p></li>
+      <li><h3>Export and keep</h3><p>Customs-ready paperwork plus an evidence record pinned to the rules in force that day, retained for six years.</p></li>
+    </ol>
+    <div class="human-note">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="13" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M7 35c1.6-7 6.6-10.5 13-10.5S31.4 28 33 35" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M25 19.5l3 3 6-6.5" fill="none" stroke="var(--clear)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <h3>A person signs off every consequential decision.</h3>
+        <p>Published studies show human and AI teams beat either alone when the human is the stronger party, and human experts still classify goods far more accurately than autonomous AI agents. So Tariffmark does the research, narrowing and rule-checking, and leaves the call with you. You or your representative remain the legal declarant.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TECHNOLOGY ================= -->
+<section class="block" id="technology" aria-labelledby="tech-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="tech-h">The UK regime, engineered into software.</h2>
+      <p>The language model is one replaceable part. The value sits in a knowledge-engineered UK Global Tariff, executable origin rules and a corpus that remembers which rules applied on which date. Select a component to see what it does.</p>
+    </div>
+    <div class="arch">
+      <div class="arch-map" id="archMap"></div>
+      <div class="arch-panel" id="archPanel" aria-live="polite"></div>
+    </div>
+    <div class="research">
+      <div><b>46.8%</b><p>Best autonomous AI agent's exact 10-digit accuracy on an expert-level classification benchmark, against 95% for human experts. End-to-end prompting is the wrong design for this problem.</p><cite>HSCodeComp benchmark, 2025 (pre-print)</cite></div>
+      <div><b>17–33%</b><p>Share of queries where leading citation-producing legal AI tools still hallucinated, most often by citing authority that does not support the answer. Tariffmark scores that separately.</p><cite>Journal of Empirical Legal Studies, 2025</cite></div>
+      <div><b>0</b><p>Published classification studies on the UK regime, and no UK vendor publishing a validated accuracy method. Tariffmark plans to publish the first UK benchmark with its method and score.</p><cite>Systematic review, Discover Computing, 2026; Tariffmark market review</cite></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRINCIPLES ================= -->
+<section class="block" id="principles" aria-labelledby="pr-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="pr-h">Five commitments the product is built around.</h2>
+      <p>Each one answers a question a trader, an intermediary or an auditor will ask before they trust a decision.</p>
+    </div>
+    <div class="pillars">
+      <article class="pillar"><h3>Origin comes first</h3><p>Preferential-origin determination under the UK–EU TCA, the India–UK CETA, CPTPP and other UK agreements is a core product, with the proof requirements attached.</p><p class="why">Origin engines exist today only in enterprise suites priced for corporate trade teams.</p></article>
+      <article class="pillar"><h3>Defensible on audit</h3><p>Every determination carries its reasoning, tariff headings, comparable rulings, a confidence score and a retained record that can support an advance ruling application.</p><p class="why">Explainability is part of the architecture, so it cannot be bolted on later.</p></article>
+      <article class="pillar"><h3>Honest about liability</h3><p>Tariffmark prepares; it never files on its own authority. The trader or their representative approves and remains the declarant.</p><p class="why">That matches how UK customs liability actually works.</p></article>
+      <article class="pillar"><h3>Priced in public</h3><p>Self-serve sign-up from a single shipping document, published tiers, card payment and per-declaration metering. No sales call needed to see what it costs.</p><p class="why">Only one of around 20 competitors reviewed publishes its prices.</p></article>
+      <article class="pillar"><span class="tag">From year two</span><h3>Better with every approval</h3><p>Approved determinations and ruling outcomes build a UK-specific corpus that sharpens confidence scores and narrows edge cases over time.</p><p class="why">This advantage takes time to accumulate, and it is not one Tariffmark can claim on day one.</p></article>
+    </div>
+    <div class="never">
+      <h3>What Tariffmark will never say</h3>
+      <ul>
+        <li><span><b>"HMRC-approved."</b> HMRC does not endorse customs software. The CDS developer list is a directory, not an accreditation.</span></li>
+        <li><span><b>An accuracy figure without its method.</b> Accuracy will be published against a named benchmark, with the method attached.</span></li>
+        <li><span><b>"Guaranteed" duty savings.</b> Savings depend on your goods, your suppliers' evidence and the agreement's rules.</span></li>
+        <li><span><b>That it replaces the customs expert.</b> Experts review the hard cases, and every decision has a named approver.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CUSTOMERS ================= -->
+<section class="block" id="customers" aria-labelledby="cu-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="cu-h">Who Tariffmark is for.</h2>
+      <p>Two motions share one engine: SME traders sign up directly, and customs intermediaries use a workspace that serves many clients at once.</p>
+    </div>
+    <div class="aud-tabs" role="tablist" aria-label="Customer groups" id="audTabs"></div>
+    <div class="aud-panel" id="audPanel" role="tabpanel" aria-live="polite"></div>
+    <p class="later"><b>Later on the roadmap:</b> high-volume classification for e-commerce importers ahead of the end of low-value import relief by October 2028, and an India-side product for exporting MSMEs. Large enterprises with in-house trade teams are deliberately out of scope.</p>
+  </div>
+</section>
+
+<!-- ================= COMPARISON ================= -->
+<section class="block" id="compare" aria-labelledby="cmp-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="cmp-h">Where the alternatives stop.</h2>
+      <p>Some tools classify but cannot file. Others file but do not determine origin. Enterprise suites do both at enterprise prices. Tariffmark is designed for the combination, at a price an SME can see before it buys.</p>
+    </div>
+    <div class="table-scroll">
+      <table class="cmp">
+        <thead><tr><th scope="col">Capability</th><th scope="col" class="us">Tariffmark (planned)</th><th scope="col">AI customs startups</th><th scope="col">Classification specialists</th><th scope="col">Enterprise trade suites</th><th scope="col">Customs broker</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">AI commodity classification</th><td class="us y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="p">Partial</td><td class="n">No</td></tr>
+          <tr><th scope="row">Preferential-origin determination</th><td class="us y">Core product</td><td class="n">No</td><td class="p">Flags eligibility</td><td class="y">Yes, enterprise only</td><td class="p">Opaque</td></tr>
+          <tr><th scope="row">Reasoning and citations on every decision</th><td class="us y">Core</td><td class="n">No</td><td class="p">Partial</td><td class="p">Partial</td><td class="n">No</td></tr>
+          <tr><th scope="row">Published, validated accuracy method</th><td class="us p">Planned, first UK benchmark</td><td class="n">Asserted only</td><td class="p">Expert-verified codes</td><td class="n">No</td><td class="n">Not applicable</td></tr>
+          <tr><th scope="row">Audit trail mapped to PAS 41201</th><td class="us p">Planned</td><td class="n">No</td><td class="p">Partial</td><td class="n">No</td><td class="n">No</td></tr>
+          <tr><th scope="row">UK customs (CDS) filing</th><td class="us p">Planned, via partners and API</td><td class="y">Yes</td><td class="n">No</td><td class="y">Yes</td><td class="y">Yes, by a person</td></tr>
+          <tr><th scope="row">Transparent SME pricing</th><td class="us y">Yes</td><td class="n">Rarely</td><td class="y">Yes</td><td class="n">No</td><td class="p">Per entry</td></tr>
+          <tr><th scope="row">UK–India CETA workflow</th><td class="us p">Planned</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="p">Manual</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cmp-note">Category-level summary based on public product information reviewed in September 2026. Individual providers vary, and Tariffmark entries describe planned capabilities.</p>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="block" id="pricing" aria-labelledby="pp-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="pp-h">Planned pricing, published from day one.</h2>
+      <p>A subscription covers access, regulatory updates and an allowance of determinations. Beyond that, each determination is metered. There is no free tier; a 14-day trial runs on one of your real shipments.</p>
+    </div>
+    <div class="bill-toggle" role="group" aria-label="Billing period">
+      <button aria-pressed="false" data-bill="monthly">Monthly</button>
+      <button aria-pressed="true" data-bill="annual">Annual, about two months free</button>
+    </div>
+    <div class="plans" id="plans"></div>
+
+    <div class="calc">
+      <div>
+        <h3>Which plan fits your volume?</h3>
+        <p>Move the slider to your typical number of customs determinations a year. Costs are annual billing plus metered overage.</p>
+        <label for="vol">Determinations per year</label>
+        <div class="vol" id="volOut">120</div>
+        <input type="range" id="vol" min="10" max="1500" step="10" value="120">
+      </div>
+      <div class="calc-out" id="calcOut" aria-live="polite"></div>
+    </div>
+
+    <div class="addons">
+      <div><b>Audit evidence pack</b><span class="ap">£150 per dossier or £900 a year</span><p>A dossier that supports an advance tariff or origin ruling application.</p></div>
+      <div><b>More trade agreements</b><span class="ap">£600 a year per bundle</span><p>Origin rules beyond the UK–EU TCA, such as CPTPP, Japan and Australia.</p></div>
+      <div><b>UK–India CETA workflow</b><span class="ap">£900 a year or £15 per declaration</span><p>Origin declaration preparation, format checks and URN capture.</p></div>
+      <div><b>Expert review</b><span class="ap">£75–£150 per case</span><p>An accredited customs practitioner reviews contested or high-value items.</p></div>
+    </div>
+    <p class="price-note">Prices are indicative plans in GBP excluding VAT and will be confirmed with design partners before launch. Intermediary plans include extra seats priced per user and referral credits of 15–20% of first-year value for clients they bring on.</p>
+  </div>
+</section>
+
+<!-- ================= MARKET ================= -->
+<section class="block" id="market" aria-labelledby="mk-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="mk-h">A mid-hundreds-of-millions market in the UK alone.</h2>
+      <p>Sized bottom-up from the UK goods-trading business population and a blended annual contract value, and cross-checked against the fees traders already pay intermediaries.</p>
+    </div>
+    <div class="market">
+      <div>
+        <div class="nest" role="img" aria-label="Nested squares drawn to scale by area: UK total addressable market about £0.9 billion a year, serviceable SME market about £0.55 billion, year-three obtainable share £4 to 6 million ARR.">
+          <div class="tam"><b>≈ £0.9bn</b><span>UK total market a year, about 300,000 goods-trading businesses</span></div>
+          <div class="sam"><b>≈ £0.55bn</b><span>SME goods traders, about 220,000 firms</span></div>
+          <div class="som"></div>
+          <span class="som-label"><b>£4–6m ARR</b><br>Year-three target, about 1% of the SME market</span>
+        </div>
+        <p class="nest-cap">Squares drawn to scale by area. Estimates use a blended £2,500 SME contract value that has not yet been tested with customers. Year-five target: £12–15m ARR.</p>
+      </div>
+      <div>
+        <div class="drivers">
+          <div>Intermediaries are being licensed while their numbers fall<span>Rising compliance cost, falling capacity</span></div>
+          <div>A British Standard now presumes AI-prepared declarations<span>A design target and a reason to buy</span></div>
+          <div>The state has stopped building a free declaration platform<span>The Single Trade Window project closed</span></div>
+          <div>Origin remains unsolved money<span>83.1% preference utilisation on GB exports to the EU</span></div>
+          <div>Low-value import relief ends by October 2028<span>Millions of parcels become declarable</span></div>
+          <div>The India–UK CETA is live<span>A new, manual, rejection-prone origin process</span></div>
+        </div>
+        <p class="world">For context, the global AI trade-compliance segment is forecast to grow from <b>US$1.20bn to US$7.45bn by 2034</b>, and the global customs brokerage fee pool from <b>US$42.2bn to US$68.4bn by 2035</b>. These figures are directional; Tariffmark's plan rests on the UK numbers.</p>
+      </div>
+    </div>
+
+    <div class="whynow">
+      <h3>Why now: dates already in traders' calendars</h3>
+      <div class="tl">
+        <div class="past"><time>4 Jun 2026</time><p>PAS 41201:2026 published, the HMRC-sponsored standard for customs intermediaries that presumes AI assistance.</p></div>
+        <div class="past"><time>15 Jul 2026</time><p>India–UK CETA enters into force, with self-certified origin declarations.</p></div>
+        <div class="past"><time>21 Sep 2026</time><p>HMRC consultation on mandatory registration of customs intermediaries closes.</p></div>
+        <div class="today"><time>2027</time><p>Tariffmark's first commercial release planned, with design partners already piloting.</p></div>
+        <div><time>Oct 2028</time><p>Low-value import relief abolished; every parcel needs a classification.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INDIA CORRIDOR ================= -->
+<section class="block corridor" id="india" aria-labelledby="in-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="in-h">The UK–India corridor, from the first year.</h2>
+      <p>The India–UK Comprehensive Economic and Trade Agreement has been in force since 15 July 2026. Its self-certified origin process is prescriptive and manual, problems with the registration service were reported within weeks, and no software product serves it yet. Because it runs through the UK regime, Tariffmark can reuse its core engine for it.</p>
+    </div>
+    <div class="cor-grid">
+      <ol class="cor-steps">
+        <li><div><b>Check the product-specific rule</b><p>The origin engine tests your goods against the CETA rules for their heading.</p></div></li>
+        <li><div><b>Register once per EORI</b><p>Guidance through the UK registration service, with your reference captured for reuse.</p></div></li>
+        <li><div><b>Generate a conforming declaration</b><p>A PDF origin declaration checked against the required format before it leaves your hands.</p></div></li>
+        <li><div><b>Keep the proof</b><p>Supplier evidence and the determination record retained in case the claim is queried.</p></div></li>
+      </ol>
+      <div class="cor-facts">
+        <div><b>Planned for 2027</b><p>The CETA corridor module is scheduled with the published UK benchmark in the third quarter of Tariffmark's first commercial year.</p></div>
+        <div><b>~173,350</b><p>Indian MSMEs that export, facing a dense web of trade agreements. An India-side product is planned for year three with local partners.</p></div>
+        <div><b>£900 a year</b><p>Planned module price, or £15 per declaration for occasional exporters.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section class="block" id="roadmap" aria-labelledby="rm-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="rm-h">Roadmap.</h2>
+      <p>Each release has a measurable outcome attached, and dates are planning assumptions. The current phase is validation: interviews with SME traders, pilots with intermediary design partners, and testing a prototype against an expert-adjudicated benchmark.</p>
+    </div>
+    <div class="rm-tabs" role="tablist" id="rmTabs"></div>
+    <div id="rmPanel" role="tabpanel" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= FOUNDER ================= -->
+<section class="block" id="founder" aria-labelledby="fo-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="fo-h">Founder.</h2>
+    </div>
+    <div class="founder">
+      <div class="f-card">
+        <div class="portrait"><img src="assets/naveen-nandakumar.jpg" alt="Portrait of Naveen Nandakumar" width="480" height="480"></div>
+        <div>
+          <h3>Naveen Nandakumar</h3>
+          <p class="role">Founder, Tariffmark · Based in the UK</p>
+        </div>
+      </div>
+      <div class="f-bio">
+        <p>Naveen has handled the paperwork Tariffmark is designed to prepare. As Supply Chain Manager at Cavli Wireless, an IoT hardware manufacturer in Cochin, India, he ran procurement, inventory control and international shipping, and coordinated the commercial invoices, packing lists, shipping bills and customs documentation behind it.</p>
+        <p>That work included Special Economic Zone customs processes and statutory reporting, component classifications and material transfers between production partners, and shipments through DHL, FedEx, UPS and freight forwarders. It is the experience behind Tariffmark's focus on getting the documents right before goods move.</p>
+        <p class="quiet">He holds an MSc in Supply Chain Management from the University of Hertfordshire. He has also completed more than a year of hands-on SAP S/4HANA Logistics training and practical project work: configuring enterprise structures, maintaining supplier and material master data, running procure-to-pay cycles from requisition to invoice verification, and integrating procurement with finance, sales and production. In UK retail operations at TK Maxx he has worked on goods receipt, stock reconciliation and inventory control.</p>
+
+        <div class="f-rel">
+          <div><b>Customs documentation</b><p>Invoices, packing lists, shipping bills and SEZ customs processes for a hardware manufacturer.</p></div>
+          <div><b>Inventory control</b><p>Goods receipt, stock transfers and reconciliation in UK retail operations.</p></div>
+          <div><b>SAP S/4HANA logistics</b><p>More than a year of hands-on work on the ERP master data and procure-to-pay flows where trade data originates.</p></div>
+        </div>
+
+        <div class="f-tl">
+          <div><time>2026</time><div><b>Founder, Tariffmark</b><p>Validation phase: design partners, SME interviews and a prototype benchmark.</p></div></div>
+          <div><time>2025 – 2026</time><div><b>SAP S/4HANA Logistics training and project work</b><p>Wizcore Global IT Training, UK. More than a year of hands-on configuration, testing and practical project work across procure-to-pay, inventory and materials management.</p></div></div>
+          <div><time>2025 – now</time><div><b>UK retail inventory operations, TK Maxx</b><p>Inventory control, stock reconciliation and goods-receipt compliance.</p></div></div>
+          <div><time>2023 – 2025</time><div><b>MSc Supply Chain Management</b><p>University of Hertfordshire, UK.</p></div></div>
+          <div><time>2021 – 2023</time><div><b>Supply Chain Manager, Cavli Wireless</b><p>Cochin, India. Procurement, logistics, import and export documentation, SEZ customs compliance.</p></div></div>
+          <div><time>2018 – 2021</time><div><b>Bachelor of Business Administration</b><p>Bharathiar University, India.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="block" id="faq" aria-labelledby="fq-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="fq-h">Questions traders ask first.</h2></div>
+    <div class="faq">
+      <details><summary>Does Tariffmark file my customs declaration?</summary><p>No. Tariffmark prepares the determination and customs-ready paperwork. You, your forwarder or your customs agent approve it and file it, and remain the declarant. CDS-ready data export is planned for 2028, after integration through HMRC's Developer Hub.</p></details>
+      <details><summary>Is Tariffmark approved by HMRC?</summary><p>HMRC does not approve or endorse customs software, and Tariffmark will never claim otherwise. The product is being designed to the British Standard for customs intermediaries, PAS 41201:2026, so that its audit trail fits the requirements intermediaries already face.</p></details>
+      <details><summary>What happens when the AI is not sure?</summary><p>Every determination carries a confidence score and a groundedness score. If either falls below your threshold, or the duty at stake is high, the case is routed to review: you can add information, ask an accredited customs practitioner, or build a dossier for an advance tariff ruling from HMRC.</p></details>
+      <details><summary>What if the tariff or an agreement changes?</summary><p>Every rule is stored with the dates it applied, and each determination is pinned to the versions it relied on. When a rule changes, the products in your catalogue that it affects are re-checked and you are told what changed and why. The target is within 24 hours of the change.</p></details>
+      <details><summary>Can I use it today?</summary><p>Not yet. Tariffmark is in its validation phase and plans its first commercial release in 2027. Customs intermediaries can apply to be one of three to five design partners, and SME traders can join discovery interviews that shape the product and its pricing.</p></details>
+      <details><summary>How long are records kept?</summary><p>Six years, matching the record-keeping period PAS 41201 sets for intermediaries. Records stay reproducible: a determination made in 2026 can be shown under the rules in force in 2026 during an audit years later.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="block" id="contact" aria-labelledby="ct-h">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <div class="sec-head" style="margin-bottom:28px">
+          <h2 id="ct-h">Help shape Tariffmark.</h2>
+          <p>We are looking for a small group of people who live with customs paperwork every week.</p>
+        </div>
+        <div class="ways">
+          <div><b>Customs intermediaries and forwarders</b><p>Three to five design partners. A 60-day shadow pilot on your own declarations, PAS 41201 co-design, and 50% off the first year in exchange for outcome data and a reference.</p></div>
+          <div><b>SME importers and exporters</b><p>A 45-minute discovery interview about how you classify goods, claim preference and work with your broker today.</p></div>
+          <div><b>Customs practitioners</b><p>Paid expert review and benchmark adjudication.</p></div>
+          <div><b>UK–India corridor partners</b><p>Exporters, customs brokers and export bodies working under the CETA.</p></div>
+        </div>
+      </div>
+      <form class="enq" id="enq" novalidate>
+        <div class="two">
+          <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="f-company">Company</label><input id="f-company" name="company" autocomplete="organization" required></div>
+        </div>
+        <div class="field"><label for="f-email">Work email</label><input id="f-email" name="email" type="email" autocomplete="email" required><span class="err" id="emailErr" hidden>Enter an email address like name@company.co.uk.</span></div>
+        <div class="two">
+          <div class="field"><label for="f-role">I am a</label>
+            <select id="f-role" name="role">
+              <option>SME importer or exporter</option>
+              <option>Customs intermediary or forwarder</option>
+              <option>Customs practitioner</option>
+              <option>UK–India corridor trader or partner</option>
+              <option>Investor or other partner</option>
+            </select></div>
+          <div class="field"><label for="f-vol">Declarations a year</label>
+            <select id="f-vol" name="volume">
+              <option>Under 50</option><option selected>50–500</option><option>500–5,000</option><option>Over 5,000</option>
+            </select></div>
+        </div>
+        <div class="field"><label for="f-msg">What should we know?</label><textarea id="f-msg" name="message" placeholder="For example: we export footwear to Ireland and Germany and rarely claim preference."></textarea></div>
+        <button class="btn btn-primary" type="submit" style="justify-self:start">Register interest</button>
+        <div class="form-done" id="formDone" hidden><b>Thanks, your details are ready.</b>This preview site does not send messages yet. Enquiries will be connected when Tariffmark's design-partner programme opens.</div>
+        <p class="form-small">We will only use these details to reply to you.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#top"><svg aria-hidden="true"><use href="#cb-mark"/></svg><span class="wordmark">Tariffmark</span></a>
+        <p>The defensible-decision layer for UK SME trade. Commodity classification, preferential origin and customs paperwork, with the evidence attached.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul><li><a href="#how">How it works</a></li><li><a href="#technology">Technology</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#india">UK–India corridor</a></li><li><a href="#roadmap">Roadmap</a></li></ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul><li><a href="#founder">Founder</a></li><li><a href="#market">Market</a></li><li><a href="#faq">Questions</a></li><li><a href="#contact">Become a design partner</a></li></ul>
+      </div>
+    </div>
+    <div class="disclaim">
+      <p>Tariffmark is a proposed venture in development. Product capabilities, prices, release dates and market estimates on this site describe plans and assumptions, not a live service or results. Tariffmark is not affiliated with, approved or endorsed by HMRC; HMRC does not endorse customs software. Examples are illustrative and are not classification or origin rulings.</p>
+      <details class="sources">
+        <summary>Sources for figures on this site</summary>
+        <ol>
+          <li>HMRC, Customs declarants and declaration volumes for international trade in 2025 (May 2026). <a href="https://www.gov.uk/government/statistics/customs-declarants-and-declaration-volumes-for-international-trade-in-2025/customs-declarants-and-declaration-volumes-for-international-trade-in-2025-commentary" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>DBT/HMRC, Preference utilisation of UK trade in goods 2024 (April 2026). <a href="https://www.gov.uk/government/statistics/preference-utilisation-of-uk-trade-in-goods-2024/preference-utilisation-of-uk-goods-in-2024" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>HMRC, Research into customs administrative burden 2017 and 2023 (RR808, Ipsos). <a href="https://www.gov.uk/government/publications/research-into-customs-administrative-burden-2017-and-2023/ipsos-survey-executive-summary-2023" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>FSB, written evidence to the Business and Trade Committee, export-led growth inquiry. <a href="https://committees.parliament.uk/writtenevidence/122678/html/" target="_blank" rel="noopener">parliament.uk</a></li>
+          <li>British Chambers of Commerce, EU trade getting harder (December 2025). <a href="https://www.britishchambers.org.uk/news/2025/12/eu-trade-getting-harder/" target="_blank" rel="noopener">britishchambers.org.uk</a></li>
+          <li>BSI / GOV.UK, PAS 41201:2026 Customs intermediaries specification (June 2026). <a href="https://www.gov.uk/government/publications/standard-for-customs-intermediaries/pas-412012026-customs-intermediaries-preparation-and-submission-of-customs-declarations-specification" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>GOV.UK, Customs intermediaries: introduction of mandatory registration, consultation (June–September 2026). <a href="https://www.gov.uk/government/consultations/introduction-of-mandatory-registration-for-customs-intermediaries/customs-intermediaries-introduction-of-mandatory-registration" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>GOV.UK, Historic UK–India free trade agreement is now in effect (July 2026). <a href="https://www.gov.uk/government/news/historic-uk-india-free-trade-agreement-is-now-in-effect" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>GOV.UK, Register to complete origin declarations under the UK–India FTA: service availability and issues. <a href="https://www.gov.uk/government/publications/register-to-complete-origin-declarations-under-the-uk-india-free-trade-agreement-service-availability-and-issues" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>GOV.UK, Software developers providing customs declaration software. <a href="https://www.gov.uk/guidance/list-of-software-developers-providing-customs-declaration-support" target="_blank" rel="noopener">gov.uk</a></li>
+          <li>Yang et al., HSCodeComp benchmark (2025, pre-print). <a href="https://arxiv.org/abs/2510.19631" target="_blank" rel="noopener">arxiv.org</a></li>
+          <li>Magesh et al., Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools, Journal of Empirical Legal Studies (2025). <a href="https://arxiv.org/abs/2405.20362" target="_blank" rel="noopener">arxiv.org</a></li>
+          <li>Vaccaro, Almaatouq &amp; Malone, When combinations of humans and AI are useful, Nature Human Behaviour (2024). <a href="https://www.nature.com/articles/s41562-024-02024-1" target="_blank" rel="noopener">nature.com</a></li>
+          <li>PIB (Government of India), MSME exports and exporting MSMEs. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2087361" target="_blank" rel="noopener">pib.gov.in</a></li>
+          <li>Market sizing: Tariffmark business concept note, bottom-up estimate with UK Business Population Estimates 2025; global segment figures from market.us and published research houses.</li>
+        </ol>
+      </details>
+      <p>© 2026 Tariffmark. Website by First500days.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
